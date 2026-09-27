@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Communication Assistant & English Coach AI</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="manifest" href="/static/manifest.json">
+  <meta name="theme-color" content="#4f46e5">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col md:flex-row antialiased">
+
+  <!-- Sidebar Navigation -->
+  <aside class="w-full md:w-64 bg-slate-900 text-white flex-shrink-0 flex flex-col justify-between shadow-xl">
+    <div>
+      <!-- Brand Logo -->
+      <div class="p-6 border-b border-slate-800 flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xl font-bold shadow-lg">
+          <i class="fa-solid fa-paper-plane"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-lg leading-tight tracking-tight text-white">Comms AI</h1>
+          <p class="text-xs text-indigo-400 font-medium tracking-wide">& English Coach</p>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="p-4 space-y-1" id="nav-menu">
+        <div class="px-3 pt-2 pb-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">English Learning</div>
+        
+        <button onclick="switchTab('coach')" id="tab-btn-coach" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all bg-indigo-600 text-white shadow-md">
+          <i class="fa-solid fa-graduation-cap text-base w-5 text-center"></i>
+          <span>Grammar & Writing</span>
+        </button>
+
+        <button onclick="switchTab('chat')" id="tab-btn-chat" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-300 hover:bg-slate-800 hover:text-white">
+          <i class="fa-solid fa-microphone-lines text-base w-5 text-center text-rose-400"></i>
+          <span>Chat & Speaking</span>
+          <span class="ml-auto text-[9px] uppercase font-bold px-1.5 py-0.5 rounded bg-rose-500 text-white">Voice</span>
+        </button>
+
+        <button onclick="switchTab('vocab')" id="tab-btn-vocab" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-300 hover:bg-slate-800 hover:text-white">
+          <i class="fa-solid fa-book-bookmark text-base w-5 text-center text-amber-400"></i>
+          <span>Vocabulary Builder</span>
+          <span class="ml-auto text-[9px] uppercase font-bold px-1.5 py-0.5 rounded bg-amber-500 text-slate-900">Words</span>
+        </button>
+
+        <div class="px-3 pt-3 pb-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">Workplace Tools</div>
+
+        <button onclick="switchTab('drafter')" id="tab-btn-drafter" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-300 hover:bg-slate-800 hover:text-white">
+          <i class="fa-solid fa-pen-nib text-base w-5 text-center"></i>
+          <span>Smart Drafter</span>
+        </button>
+
+        <button onclick="switchTab('tone')" id="tab-btn-tone" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-300 hover:bg-slate-800 hover:text-white">
+          <i class="fa-solid fa-sliders text-base w-5 text-center"></i>
+          <span>Tone Transformer</span>
+        </button>
+
+        <button onclick="switchTab('reply')" id="tab-btn-reply" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-300 hover:bg-slate-800 hover:text-white">
+          <i class="fa-solid fa-reply-all text-base w-5 text-center"></i>
+          <span>Quick Reply</span>
+        </button>
+
+        <button onclick="switchTab('summarize')" id="tab-btn-summarize" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-300 hover:bg-slate-800 hover:text-white">
+          <i class="fa-solid fa-list-check text-base w-5 text-center"></i>
+          <span>Summarizer</span>
+        </button>
+
+        <button onclick="switchTab('settings')" id="tab-btn-settings" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-300 hover:bg-slate-800 hover:text-white">
+          <i class="fa-solid fa-gear text-base w-5 text-center"></i>
+          <span>Persona & API</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Status Footer -->
+    <div class="p-4 border-t border-slate-800 bg-slate-950/40 text-xs">
+      <div class="flex items-center justify-between mb-1">
+        <span class="text-slate-400 font-medium">Engine Mode:</span>
+        <span id="engine-status-badge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300">Checking...</span>
+      </div>
+      <p id="engine-model-text" class="text-slate-500 truncate">Model: gemini-2.5-flash</p>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+    <!-- Top Header -->
+    <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm sticky top-0 z-10">
+      <div class="flex items-center space-x-3">
+        <h2 id="page-title" class="text-xl font-bold text-slate-800">🎓 English Coach & Grammar Explainer</h2>
+      </div>
+      <div class="flex items-center space-x-4">
+        <!-- Voice Helper Tooltip -->
+        <span class="hidden sm:inline-flex items-center gap-1.5 text-xs text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full">
+          <i class="fa-solid fa-volume-high text-emerald-600"></i> Click 🔊 to listen
+        </span>
+        <span id="user-greeting" class="text-sm font-medium text-slate-600">Welcome!</span>
+        <button onclick="switchTab('settings')" class="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 flex items-center justify-center transition">
+          <i class="fa-solid fa-user-gear"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- ========================================== -->
+    <!-- TAB 1: ENGLISH COACH (Grammar & Writing)  -->
+    <!-- ========================================== -->
+    <section id="view-coach" class="p-6 max-w-5xl mx-auto w-full animate-fade-in space-y-6">
+      <div class="bg-gradient-to-r from-emerald-600 to-teal-700 rounded-2xl p-6 text-white shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <h3 class="text-xl font-bold mb-1">Improve Your English & Communicate Naturally</h3>
+          <p class="text-emerald-100 text-sm max-w-2xl">
+            Type or speak any sentence—we'll fix grammar and phrasing, explain the rules in simple terms, and suggest richer vocabulary!
+          </p>
+        </div>
+        <div class="bg-white/10 backdrop-blur-md px-4 py-2.5 rounded-xl border border-white/20 text-xs">
+          <span class="block text-emerald-200 uppercase font-semibold text-[10px]">Your English Level:</span>
+          <span id="coach-level-display" class="font-bold text-sm">Intermediate</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Input Form -->
+        <div class="lg:col-span-5 bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col space-y-4">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <label class="block text-sm font-semibold text-slate-700">What would you like to say?</label>
+              <!-- Speech Recognition Mic Button -->
+              <button onclick="toggleSpeechRecognition('coach-input', this)" class="text-xs bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 px-2.5 py-1 rounded-lg border border-slate-200 transition flex items-center gap-1.5" title="Click to speak with microphone">
+                <i class="fa-solid fa-microphone"></i> <span>Speak</span>
+              </button>
+            </div>
+            <textarea id="coach-input" rows="7" placeholder="Type or click Speak to say your sentence... (e.g., 'I am looking forward to discuss with you regarding project.')" class="w-full p-4 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none text-slate-800 text-sm leading-relaxed resize-none"></textarea>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase">Focus Area</label>
+            <select id="coach-focus" class="w-full p-2.5 rounded-xl border border-slate-300 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-emerald-500">
+              <option value="Grammar & Natural Fluency">Grammar & Natural Fluency (Recommended)</option>
+              <option value="Prepositions & Tenses">Prepositions & Verb Tenses</option>
+              <option value="Professional & Workplace English">Professional & Workplace English</option>
+              <option value="Casual & Conversational">Casual & Friendly Everyday Talk</option>
+              <option value="Advanced Vocabulary & Idioms">Advanced Vocabulary & Idiomatic Phrasing</option>
+            </select>
+          </div>
+
+          <div class="pt-2 border-t border-slate-100">
+            <span class="text-xs text-slate-400 font-medium block mb-2">Try a sample mistake:</span>
+            <div class="flex flex-wrap gap-2">
+              <button onclick="fillCoachSample('I am writing this email for asking update about the meeting yesterday.')" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 px-2.5 py-1.5 rounded-lg transition">Email query</button>
+              <button onclick="fillCoachSample('She don\'t agree with my suggestion on last Friday.')" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 px-2.5 py-1.5 rounded-lg transition">Tense & agreement</button>
+              <button onclick="fillCoachSample('Can you explain me how to do this task quickly?')" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 px-2.5 py-1.5 rounded-lg transition">Preposition usage</button>
+            </div>
+          </div>
+
+          <button onclick="runEnglishCoach()" id="coach-submit-btn" class="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl shadow-md transition flex items-center justify-center space-x-2">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <span>Analyze & Improve English</span>
+          </button>
+        </div>
+
+        <!-- Output / Coaching Analysis -->
+        <div class="lg:col-span-7 space-y-4">
+          <div id="coach-placeholder" class="bg-white p-12 rounded-2xl border border-dashed border-slate-300 text-center flex flex-col items-center justify-center min-h-[380px]">
+            <div class="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl mb-4">
+              <i class="fa-solid fa-lightbulb"></i>
+            </div>
+            <h4 class="text-slate-800 font-bold text-base mb-1">Your Personal English Feedback will appear here</h4>
+            <p class="text-slate-500 text-sm max-w-sm">Enter any sentence on the left to see corrections, grammar rule explanations, and listen to native audio.</p>
+          </div>
+
+          <div id="coach-loading" class="hidden bg-white p-12 rounded-2xl border border-slate-200 text-center flex flex-col items-center justify-center min-h-[380px]">
+            <div class="animate-spin text-emerald-600 text-3xl mb-3">
+              <i class="fa-solid fa-circle-notch"></i>
+            </div>
+            <p class="text-slate-700 font-medium text-sm">Analyzing grammar, structure, and phrasing...</p>
+          </div>
+
+          <div id="coach-results" class="hidden space-y-4">
+            <div id="coach-encouragement-card" class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl flex items-start space-x-3">
+              <i class="fa-solid fa-star text-emerald-600 mt-1"></i>
+              <div>
+                <h5 class="text-emerald-900 font-bold text-xs uppercase tracking-wider">Coach's Tip</h5>
+                <p id="coach-encouragement-text" class="text-emerald-800 text-sm mt-0.5"></p>
+              </div>
+            </div>
+
+            <!-- Version 1: Natural & Fluent -->
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative group">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 flex items-center gap-1.5">
+                  <i class="fa-solid fa-check-circle"></i> Natural & Fluent
+                </span>
+                <div class="flex items-center gap-2">
+                  <button onclick="speakElementText('coach-natural-text')" class="btn-speaker text-xs text-slate-500 hover:text-emerald-600 font-medium flex items-center gap-1 bg-slate-50 hover:bg-emerald-50 px-2.5 py-1 rounded-lg border border-slate-200 transition" title="Listen to pronunciation">
+                    <i class="fa-solid fa-volume-high"></i> Listen
+                  </button>
+                  <button onclick="copyToClipboard('coach-natural-text')" class="text-xs text-slate-500 hover:text-emerald-600 font-medium flex items-center gap-1 bg-slate-50 hover:bg-emerald-50 px-2.5 py-1 rounded-lg border border-slate-200 transition">
+                    <i class="fa-regular fa-copy"></i> Copy
+                  </button>
+                </div>
+              </div>
+              <p id="coach-natural-text" class="text-slate-800 text-base font-medium leading-relaxed"></p>
+            </div>
+
+            <!-- Version 2: Advanced / Executive -->
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative group">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 flex items-center gap-1.5">
+                  <i class="fa-solid fa-crown"></i> Advanced / Executive
+                </span>
+                <div class="flex items-center gap-2">
+                  <button onclick="speakElementText('coach-advanced-text')" class="btn-speaker text-xs text-slate-500 hover:text-indigo-600 font-medium flex items-center gap-1 bg-slate-50 hover:bg-indigo-50 px-2.5 py-1 rounded-lg border border-slate-200 transition" title="Listen to pronunciation">
+                    <i class="fa-solid fa-volume-high"></i> Listen
+                  </button>
+                  <button onclick="copyToClipboard('coach-advanced-text')" class="text-xs text-slate-500 hover:text-indigo-600 font-medium flex items-center gap-1 bg-slate-50 hover:bg-indigo-50 px-2.5 py-1 rounded-lg border border-slate-200 transition">
+                    <i class="fa-regular fa-copy"></i> Copy
+                  </button>
+                </div>
+              </div>
+              <p id="coach-advanced-text" class="text-slate-800 text-base font-medium leading-relaxed"></p>
+            </div>
+
+            <!-- Detailed Explanations Breakdown -->
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-book-open text-slate-400"></i> Why We Made These Changes
+              </h4>
+              <div id="coach-corrections-list" class="space-y-3"></div>
+            </div>
+
+            <!-- Vocabulary Booster -->
+            <div id="coach-vocab-card" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-purple-600 mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-bolt"></i> Vocabulary & Idiom Boost
+              </h4>
+              <div id="coach-vocab-list" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 2: CHAT & SPEAKING PRACTICE (Roleplay) -->
+    <!-- ========================================== -->
+    <section id="view-chat" class="hidden p-6 max-w-5xl mx-auto w-full animate-fade-in space-y-4 flex flex-col h-[calc(100vh-80px)]">
+      <!-- Chat Controls Header -->
+      <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-wrap items-center justify-between gap-4 flex-shrink-0">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center font-bold text-lg">
+            <i class="fa-solid fa-comments"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-800 text-sm">Conversation Practice & Roleplay</h3>
+            <p class="text-xs text-slate-500">Practice natural speaking and chatting with live coaching notes.</p>
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-3 flex-wrap gap-2">
+          <!-- Scenario selector -->
+          <div class="flex items-center space-x-1.5">
+            <span class="text-xs text-slate-500 font-semibold uppercase">Scenario:</span>
+            <select id="chat-scenario-select" onchange="resetChatConversation()" class="p-2 rounded-xl border border-slate-300 text-xs text-slate-800 outline-none bg-slate-50 font-medium">
+              <option value="Workplace Meeting & Updates">Workplace Meeting & Updates</option>
+              <option value="Job Interview">Job Interview Practice</option>
+              <option value="Coffee Chat & Small Talk">Casual Coffee Chat & Small Talk</option>
+              <option value="Polite Negotiation & Pushback">Polite Negotiation & Pushback</option>
+              <option value="Casual Daily English">Casual Everyday English</option>
+            </select>
+          </div>
+
+          <!-- Auto speak toggle -->
+          <label class="flex items-center space-x-1.5 text-xs text-slate-600 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 cursor-pointer">
+            <input type="checkbox" id="chat-auto-tts" class="rounded text-rose-600 focus:ring-rose-500">
+            <span>🔊 Auto-speak partner</span>
+          </label>
+
+          <!-- Reset Button -->
+          <button onclick="resetChatConversation()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-2 rounded-xl transition flex items-center gap-1 font-medium">
+            <i class="fa-solid fa-arrows-rotate"></i> Reset
+          </button>
+        </div>
+      </div>
+
+      <!-- Dialogue History Stream -->
+      <div id="chat-messages-container" class="flex-1 bg-white p-5 rounded-2xl shadow-sm border border-slate-200 overflow-y-auto space-y-4">
+        <!-- Messages will be rendered here dynamically -->
+      </div>
+
+      <!-- Chat Input Area -->
+      <div class="bg-white p-3.5 rounded-2xl shadow-sm border border-slate-200 flex items-center space-x-2 flex-shrink-0">
+        <!-- Speech to Text Mic Button -->
+        <button id="chat-mic-btn" onclick="toggleChatMic()" class="w-11 h-11 rounded-xl bg-slate-100 text-slate-600 hover:bg-rose-50 hover:text-rose-600 flex items-center justify-center text-lg transition flex-shrink-0" title="Click to speak (Microphone)">
+          <i class="fa-solid fa-microphone"></i>
+        </button>
+
+        <!-- Message Input -->
+        <input type="text" id="chat-user-input" onkeydown="handleChatInputKeyDown(event)" placeholder="Type or click the microphone to speak your response..." class="flex-1 p-3 rounded-xl border border-slate-200 text-sm outline-none focus:ring-2 focus:ring-rose-500">
+
+        <!-- Send Button -->
+        <button onclick="sendChatMessage()" id="chat-send-btn" class="px-5 py-3 bg-rose-600 hover:bg-rose-700 text-white font-semibold rounded-xl transition flex items-center space-x-1.5 text-sm flex-shrink-0 shadow-md">
+          <span>Send</span> <i class="fa-solid fa-paper-plane text-xs"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 3: VOCABULARY BUILDER & WORD BANK      -->
+    <!-- ========================================== -->
+    <section id="view-vocab" class="hidden p-6 max-w-5xl mx-auto w-full animate-fade-in space-y-6">
+      <!-- Vocabulary Header -->
+      <div class="bg-gradient-to-r from-amber-500 to-orange-600 rounded-2xl p-6 text-white shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <h3 class="text-xl font-bold mb-1">Expand Your English Vocabulary & Phrasing</h3>
+          <p class="text-amber-100 text-sm max-w-2xl">
+            Learn high-impact words and idioms, listen to native pronunciation, and practice writing your own sentences with instant AI feedback!
+          </p>
+        </div>
+        <button onclick="openSavedWordsModal()" class="bg-white/20 hover:bg-white/30 backdrop-blur-md px-4 py-2.5 rounded-xl border border-white/30 text-xs font-bold flex items-center gap-2 transition">
+          <i class="fa-solid fa-bookmark text-amber-200"></i>
+          <span>My Saved Words (<span id="saved-words-count">0</span>)</span>
+        </button>
+      </div>
+
+      <!-- Topic Selector Chips -->
+      <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 space-y-3">
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500">Select a Topic to Explore:</label>
+        <div id="vocab-topic-chips" class="flex flex-wrap gap-2">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div id="vocab-loading" class="hidden bg-white p-12 rounded-2xl border border-slate-200 text-center">
+        <i class="fa-solid fa-circle-notch animate-spin text-2xl text-amber-500 mb-2"></i>
+        <p class="text-sm text-slate-600">Curating practical words and collocations...</p>
+      </div>
+
+      <!-- Word Cards Grid -->
+      <div id="vocab-cards-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Interactive Sentence Challenge Section -->
+      <div id="vocab-challenge-section" class="hidden bg-white p-6 rounded-2xl shadow-sm border-2 border-indigo-200 space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center space-x-2">
+            <span class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-sm">
+              <i class="fa-solid fa-pen"></i>
+            </span>
+            <div>
+              <h4 class="font-bold text-slate-800 text-sm">Sentence Challenge</h4>
+              <p class="text-xs text-slate-500">Practice using <span id="challenge-target-word" class="font-bold text-indigo-600"></span> in your own sentence.</p>
+            </div>
+          </div>
+          <button onclick="closeChallengeSection()" class="text-slate-400 hover:text-slate-600 text-sm"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <div class="space-y-3">
+          <div class="relative">
+            <input type="text" id="challenge-sentence-input" placeholder="Type or speak a sentence using the target word..." class="w-full p-3.5 pr-12 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+            <button onclick="toggleSpeechRecognition('challenge-sentence-input', this)" class="absolute right-3 top-3 text-slate-400 hover:text-rose-600" title="Click to speak">
+              <i class="fa-solid fa-microphone"></i>
+            </button>
+          </div>
+
+          <button onclick="submitSentenceChallenge()" id="challenge-submit-btn" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-xs transition flex items-center gap-1.5">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Evaluate My Sentence
+          </button>
+        </div>
+
+        <!-- Challenge Result -->
+        <div id="challenge-feedback-card" class="hidden p-4 rounded-xl space-y-2 border"></div>
+      </div>
+    </section>
+
+    <!-- SAVED WORDS MODAL -->
+    <div id="saved-words-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[85vh] flex flex-col overflow-hidden animate-fade-in">
+        <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+          <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-bookmark text-amber-500 text-lg"></i>
+            <h3 class="font-bold text-slate-800 text-base">Your Saved Vocabulary Bank</h3>
+          </div>
+          <button onclick="closeSavedWordsModal()" class="text-slate-400 hover:text-slate-600 w-8 h-8 rounded-lg flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="saved-words-list" class="p-5 overflow-y-auto space-y-3 flex-1">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 4: SMART DRAFTER                       -->
+    <!-- ========================================== -->
+    <section id="view-drafter" class="hidden p-6 max-w-5xl mx-auto w-full animate-fade-in space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-5 bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col space-y-4">
+          <h3 class="font-bold text-slate-800 text-lg">Message Drafter</h3>
+          <p class="text-xs text-slate-500 -mt-2">Transform brief notes into ready-to-send messages.</p>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1.5">Raw Notes or Bullet Points</label>
+            <textarea id="drafter-notes" rows="6" placeholder="- Need review of Q3 roadmap&#10;- Please send feedback by Thursday 5pm&#10;- Call on Friday if there are questions" class="w-full p-3.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 outline-none resize-none"></textarea>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1.5">Format</label>
+              <select id="drafter-type" class="w-full p-2.5 rounded-xl border border-slate-300 text-sm text-slate-700 outline-none">
+                <option value="Email">Email</option>
+                <option value="Slack / Direct Message">Slack / Teams</option>
+                <option value="Formal Announcement">Announcement</option>
+                <option value="Follow-up Message">Follow-up</option>
+                <option value="Meeting Request">Meeting Request</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1.5">Tone</label>
+              <select id="drafter-tone" class="w-full p-2.5 rounded-xl border border-slate-300 text-sm text-slate-700 outline-none">
+                <option value="Professional & Friendly">Professional & Friendly</option>
+                <option value="Executive & Polished">Executive & Polished</option>
+                <option value="Direct & Concise">Direct & Concise</option>
+                <option value="Warm & Casual">Warm & Casual</option>
+                <option value="Diplomatic & Tactful">Diplomatic & Tactful</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1.5">Recipient Context (Optional)</label>
+            <input type="text" id="drafter-recipient" placeholder="e.g. Senior Leadership, Client, Engineering team" class="w-full p-2.5 rounded-xl border border-slate-300 text-sm text-slate-700 outline-none">
+          </div>
+
+          <button onclick="runDrafter()" class="w-full py-3.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow-md transition flex items-center justify-center space-x-2">
+            <i class="fa-solid fa-paper-plane"></i>
+            <span>Generate Draft</span>
+          </button>
+        </div>
+
+        <div class="lg:col-span-7 bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <h4 class="font-bold text-slate-800 text-base">Generated Output</h4>
+            <div class="flex items-center gap-2">
+              <button onclick="speakElementText('drafter-body-output')" class="btn-speaker text-xs bg-slate-50 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 font-medium px-2.5 py-1.5 rounded-lg border border-slate-200 transition">
+                <i class="fa-solid fa-volume-high"></i> Listen
+              </button>
+              <button onclick="copyToClipboard('drafter-body-output')" class="text-xs bg-slate-50 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 font-medium px-3 py-1.5 rounded-lg border border-slate-200 transition flex items-center gap-1.5">
+                <i class="fa-regular fa-copy"></i> Copy Body
+              </button>
+            </div>
+          </div>
+
+          <div id="drafter-loading" class="hidden py-16 text-center text-slate-500">
+            <i class="fa-solid fa-circle-notch animate-spin text-2xl text-indigo-600 mb-2"></i>
+            <p class="text-sm">Composing polished message...</p>
+          </div>
+
+          <div id="drafter-result-area" class="space-y-4">
+            <div id="drafter-subject-container" class="hidden">
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Subject Line</label>
+              <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl font-semibold text-slate-800 text-sm flex items-center justify-between">
+                <span id="drafter-subject-output"></span>
+                <button onclick="copyToClipboard('drafter-subject-output')" class="text-xs text-slate-400 hover:text-indigo-600"><i class="fa-regular fa-copy"></i></button>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Message Content</label>
+              <div id="drafter-body-output" class="p-4 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm whitespace-pre-line leading-relaxed min-h-[220px]">
+                Your drafted email or message will appear here.
+              </div>
+            </div>
+
+            <div id="drafter-tips-container" class="hidden p-3.5 rounded-xl bg-indigo-50/70 border border-indigo-100 text-xs text-indigo-900">
+              <span class="font-bold block mb-1">💡 Communication Tip:</span>
+              <ul id="drafter-tips-list" class="list-disc list-inside space-y-1"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 5: TONE TRANSFORMER                    -->
+    <!-- ========================================== -->
+    <section id="view-tone" class="hidden p-6 max-w-5xl mx-auto w-full animate-fade-in space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-6 bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
+          <h3 class="font-bold text-slate-800 text-lg">Input Message</h3>
+          <textarea id="tone-input" rows="8" placeholder="Paste the message you want to adjust tone for..." class="w-full p-3.5 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-purple-500 resize-none"></textarea>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1.5">Desired Tone</label>
+            <select id="tone-target" class="w-full p-2.5 rounded-xl border border-slate-300 text-sm text-slate-700 outline-none">
+              <option value="Professional & Executive">Professional & Executive (Authoritative, Polished)</option>
+              <option value="Friendly & Warm">Friendly & Warm (Approachable, Collaborative)</option>
+              <option value="Assertive & Direct">Assertive & Direct (Clear boundaries, Decisive)</option>
+              <option value="Diplomatic & Empathetic">Diplomatic & Empathetic (Tactful, Softened)</option>
+              <option value="Ultra-Concise">Ultra-Concise (Bulleted, Minimalist)</option>
+            </select>
+          </div>
+
+          <button onclick="runToneRefiner()" class="w-full py-3.5 px-4 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-xl shadow-md transition flex items-center justify-center space-x-2">
+            <i class="fa-solid fa-sliders"></i>
+            <span>Transform Tone</span>
+          </button>
+        </div>
+
+        <div class="lg:col-span-6 bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <h4 class="font-bold text-slate-800 text-base">Transformed Result</h4>
+            <div class="flex items-center gap-2">
+              <button onclick="speakElementText('tone-output-text')" class="btn-speaker text-xs bg-slate-50 hover:bg-purple-50 text-slate-600 hover:text-purple-600 font-medium px-2.5 py-1.5 rounded-lg border border-slate-200 transition">
+                <i class="fa-solid fa-volume-high"></i> Listen
+              </button>
+              <button onclick="copyToClipboard('tone-output-text')" class="text-xs bg-slate-50 hover:bg-purple-50 text-slate-600 hover:text-purple-600 font-medium px-3 py-1.5 rounded-lg border border-slate-200 transition flex items-center gap-1.5">
+                <i class="fa-regular fa-copy"></i> Copy
+              </button>
+            </div>
+          </div>
+
+          <div id="tone-loading" class="hidden py-16 text-center text-slate-500">
+            <i class="fa-solid fa-circle-notch animate-spin text-2xl text-purple-600 mb-2"></i>
+            <p class="text-sm">Rewriting in target tone...</p>
+          </div>
+
+          <div id="tone-result-container" class="space-y-4">
+            <div id="tone-output-text" class="p-4 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm whitespace-pre-line leading-relaxed min-h-[160px]">
+              Transformed message will show here.
+            </div>
+
+            <div id="tone-alternatives-container" class="hidden space-y-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block">Alternative Variations:</span>
+              <div id="tone-alternatives-list" class="space-y-2"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 6: QUICK REPLY                         -->
+    <!-- ========================================== -->
+    <section id="view-reply" class="hidden p-6 max-w-5xl mx-auto w-full animate-fade-in space-y-6">
+      <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
+        <h3 class="font-bold text-slate-800 text-lg">Contextual Quick Reply Generator</h3>
+        <p class="text-xs text-slate-500 -mt-2">Paste any incoming message or email to get 3 ready-to-send reply options.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1.5">Incoming Message Received</label>
+            <textarea id="reply-incoming" rows="5" placeholder="Paste the email or message you received..." class="w-full p-3.5 rounded-xl border border-slate-300 text-sm outline-none resize-none"></textarea>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1.5">Your Decision / Intent (Optional)</label>
+            <textarea id="reply-intent" rows="5" placeholder="e.g. 'I agree to the deal, but I need 2 more days' or 'Decline politely due to bandwidth'..." class="w-full p-3.5 rounded-xl border border-slate-300 text-sm outline-none resize-none"></textarea>
+          </div>
+        </div>
+
+        <button onclick="runReplyGenerator()" class="py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-md transition flex items-center justify-center space-x-2">
+          <i class="fa-solid fa-reply-all"></i>
+          <span>Generate 3 Response Options</span>
+        </button>
+      </div>
+
+      <div id="reply-loading" class="hidden bg-white p-12 rounded-2xl border border-slate-200 text-center">
+        <i class="fa-solid fa-circle-notch animate-spin text-2xl text-blue-600 mb-2"></i>
+        <p class="text-sm text-slate-600">Generating strategic response options...</p>
+      </div>
+
+      <div id="reply-options-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 7: SUMMARIZER                          -->
+    <!-- ========================================== -->
+    <section id="view-summarize" class="hidden p-6 max-w-5xl mx-auto w-full animate-fade-in space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-5 bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
+          <h3 class="font-bold text-slate-800 text-lg">Thread & Notes Summarizer</h3>
+          <textarea id="summarize-content" rows="10" placeholder="Paste email thread, Slack chat transcript, or meeting notes here..." class="w-full p-3.5 rounded-xl border border-slate-300 text-sm outline-none resize-none"></textarea>
+          <button onclick="runSummarizer()" class="w-full py-3.5 px-4 bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-xl shadow-md transition flex items-center justify-center space-x-2">
+            <i class="fa-solid fa-list-check"></i>
+            <span>Extract Key Points & Actions</span>
+          </button>
+        </div>
+
+        <div class="lg:col-span-7 bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
+          <h4 class="font-bold text-slate-800 text-base border-b border-slate-100 pb-3">Executive Summary</h4>
+          <div id="summarize-loading" class="hidden py-16 text-center text-slate-500">
+            <i class="fa-solid fa-circle-notch animate-spin text-2xl text-teal-600 mb-2"></i>
+            <p class="text-sm">Synthesizing discussions and extracting tasks...</p>
+          </div>
+
+          <div id="summarize-results" class="space-y-4">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">Overview</span>
+              <p id="summarize-overview" class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 text-sm">Summary will appear here.</p>
+            </div>
+
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">Key Takeaways</span>
+              <ul id="summarize-takeaways" class="list-disc list-inside space-y-1 text-sm text-slate-700"></ul>
+            </div>
+
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">Action Items</span>
+              <div id="summarize-actions" class="space-y-2"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 8: SETTINGS & PERSONA                  -->
+    <!-- ========================================== -->
+    <section id="view-settings" class="hidden p-6 max-w-4xl mx-auto w-full animate-fade-in space-y-6">
+      <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-lg">
+              <i class="fa-solid fa-key"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-slate-800 text-base">Google Gemini API Key</h3>
+              <p class="text-xs text-slate-500">Free, fast, and gives your assistant live AI intelligence.</p>
+            </div>
+          </div>
+          <a href="https://aistudio.google.com/" target="_blank" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 flex items-center gap-1">
+            <span>Get Free Key</span> <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+          </a>
+        </div>
+
+        <div class="flex gap-2">
+          <input type="password" id="settings-api-key" placeholder="AIzaSy..." class="flex-1 p-3 rounded-xl border border-slate-300 text-sm font-mono outline-none focus:ring-2 focus:ring-indigo-500">
+          <button onclick="saveApiKey()" class="px-5 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition text-sm flex items-center gap-2">
+            <i class="fa-solid fa-save"></i> Save Key
+          </button>
+        </div>
+        <p class="text-[11px] text-slate-400">Your key is stored locally in your workspace <code class="bg-slate-100 px-1 py-0.5 rounded">.env</code> file and never shared.</p>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-5">
+        <div class="flex items-center space-x-3 pb-3 border-b border-slate-100">
+          <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-lg">
+            <i class="fa-solid fa-user-pen"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-800 text-base">Communication Profile & English Goals</h3>
+            <p class="text-xs text-slate-500">Customizes the tone, signature, and coaching difficulty to you.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Your Name</label>
+            <input type="text" id="persona-name" class="w-full p-2.5 rounded-xl border border-slate-300 text-sm text-slate-800 outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Your Role / Profession</label>
+            <input type="text" id="persona-role" placeholder="e.g. Developer, Project Manager, Student" class="w-full p-2.5 rounded-xl border border-slate-300 text-sm text-slate-800 outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">English Proficiency Level</label>
+            <select id="persona-level" class="w-full p-2.5 rounded-xl border border-slate-300 text-sm text-slate-800 outline-none">
+              <option value="Beginner">Beginner (Simple grammar explanations & basic vocabulary)</option>
+              <option value="Intermediate">Intermediate (Clear rule tips & natural collocations)</option>
+              <option value="Advanced">Advanced (Nuanced tone, idioms & executive polish)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Default Tone</label>
+            <select id="persona-tone" class="w-full p-2.5 rounded-xl border border-slate-300 text-sm text-slate-800 outline-none">
+              <option value="Professional & Friendly">Professional & Friendly</option>
+              <option value="Executive & Polished">Executive & Polished</option>
+              <option value="Direct & Concise">Direct & Concise</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Signature Template</label>
+          <textarea id="persona-signature" rows="2" class="w-full p-2.5 rounded-xl border border-slate-300 text-sm text-slate-800 outline-none resize-none"></textarea>
+          <span class="text-[11px] text-slate-400">Use <code class="bg-slate-100 px-1 py-0.5 rounded">{user_name}</code> as a placeholder for your name.</span>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Personal Communication Rules (One per line)</label>
+          <textarea id="persona-rules" rows="3" placeholder="Avoid jargon&#10;Keep messages concise&#10;Always be polite" class="w-full p-2.5 rounded-xl border border-slate-300 text-sm text-slate-800 outline-none"></textarea>
+        </div>
+
+        <button onclick="savePersona()" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl transition text-sm flex items-center gap-2">
+          <i class="fa-solid fa-floppy-disk"></i> Save Profile
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Global Toast Notification -->
+  <div id="toast" class="fixed bottom-6 right-6 bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center space-x-3 z-50 text-sm border border-slate-800">
+    <i id="toast-icon" class="fa-solid fa-check text-emerald-400"></i>
+    <span id="toast-message">Copied to clipboard!</span>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
