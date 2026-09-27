@@ -1,23 +1,27 @@
 #!/bin/bash
 # Push Communication Assistant & English Coach AI to GitHub
 
-echo "Initializing Git repository..."
-git init
+echo "Navigating to project directory..."
+cd /f/My_Ai
 
-echo "Staging files (excluding .env via .gitignore)..."
+echo "Staging all files..."
 git add .
 
-echo "Committing files..."
-git commit -m "Initial commit: Communication Assistant & English Coach AI"
+echo "Committing any updates..."
+git commit -m "Initial commit: Communication Assistant & English Coach AI" 2>/dev/null || true
 
-echo "Setting branch to main..."
+echo "Ensuring branch is main..."
 git branch -M main
 
-echo "Configuring remote repository..."
+echo "Setting correct remote repository..."
 git remote remove origin 2>/dev/null || true
-git remote add origin https://github.com/omkarkusuma9/omkarkusuma9-spec.git
+git remote add origin https://github.com/omkarkusuma9-spec/Communication-assistant-ai.git
 
-echo "Pushing to GitHub..."
+echo "Pushing code to GitHub..."
 git push -u origin main
 
-echo "Done! Check your repository on GitHub."
+echo ""
+echo "============================================="
+echo "  SUCCESS! Refresh your GitHub page now:     "
+echo "  https://github.com/omkarkusuma9-spec/Communication-assistant-ai"
+echo "============================================="
